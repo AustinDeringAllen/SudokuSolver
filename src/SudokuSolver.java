@@ -18,6 +18,8 @@ public class SudokuSolver {
         for(Integer[] position : emptyPositions) {
             System.out.println(position[0] + " , " + position[1]);
         }
+
+        prettifySudoku(board);
     }
 
     public static ArrayList<Integer[]> findEmpty(int[][] board) {
@@ -42,5 +44,17 @@ public class SudokuSolver {
             }
         }
         return true;
+    }
+
+    public static void prettifySudoku(int[][] board) {
+        System.out.println("-----------");
+        for(int[] row : board) {
+            for(int i=0; i<row.length; i++) {
+                if (i == row.length - 1)
+                    System.out.print(row[i] + "\n");
+                else
+                    System.out.print(row[i] + " , ");
+            }
+        }
     }
 }
