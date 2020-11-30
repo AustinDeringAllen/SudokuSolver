@@ -5,6 +5,7 @@ public class SudokuSolver {
         int[][] board = {
                 {0, 6, 4, 0, 9, 0, 3, 7, 0},
                 {8, 0, 0, 0, 0, 1, 6, 0, 0},
+                {5, 0, 9, 0, 0, 0, 0, 2, 0},
                 {4, 0, 0, 1, 8, 9, 7, 6, 0},
                 {3, 0, 0, 0, 0, 0, 0, 0, 2},
                 {0, 8, 6, 2, 5, 3, 0, 0, 4},
@@ -12,14 +13,19 @@ public class SudokuSolver {
                 {0, 0, 7, 9, 0, 0, 0, 0, 6},
                 {0, 5, 2, 0, 4, 0, 1, 3, 0},
         };
+
+        ArrayList<Integer[]> emptyPositions = findEmpty(board);
+        for(Integer[] position : emptyPositions) {
+            System.out.println(position[0] + " , " + position[1]);
+        }
     }
 
     public static ArrayList<Integer[]> findEmpty(int[][] board) {
         ArrayList<Integer[]> emptyPositions = new ArrayList<>();
-        for(int i=0; i<9; i++) {
-            for(int j=0; j<9; j++) {
-                if(board[i][j] == 0) {
-                    emptyPositions.add(new Integer[] {i,j});
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (board[i][j] == 0) {
+                    emptyPositions.add(new Integer[]{i, j});
                 }
             }
         }
