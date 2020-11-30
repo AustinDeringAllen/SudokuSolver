@@ -31,4 +31,16 @@ public class SudokuSolver {
         }
         return emptyPositions;
     }
+
+    public static boolean isValid(int[][] board, Integer[] position, int number) {
+        for(int i=0; i<9; i++) {
+            if(board[position[0]][i] == number) {
+                return false;
+            }
+            if(board[i][position[1]] == number) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
