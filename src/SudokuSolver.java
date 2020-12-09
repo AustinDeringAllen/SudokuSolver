@@ -71,6 +71,28 @@ public class SudokuSolver {
         return true;
     }
 
+    public static boolean checkGrid(int[][] board, Integer[] currentPosition, int number, ArrayList<Integer> impossibleNumbers) {
+        Integer[] newPosition = {currentPosition[0],currentPosition[1]};
+        for(int i=0; i<newPosition.length; i++) {
+            switch(newPosition[i] % 3) {
+                case 0:
+                    newPosition[i] += 1;
+                    break;
+                case 2:
+                    newPosition[i] -= 1;
+                    break;
+            }
+        }
+
+        for(int i=newPosition[0]-1; i<=newPosition[0]+1; i++) {
+            for(int j=newPosition[1]-1; j<=newPosition[1]+1; j++) {
+                if(board[i][j] == number)
+                    return false;
+            }
+        }
+        return true;
+    }
+
     public static int[] findEmpty(int[][] board) {
         for(int i=0; i<board.length; i++) {
             for(int j=0; j<board.length; j++) {
