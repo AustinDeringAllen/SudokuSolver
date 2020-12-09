@@ -17,42 +17,83 @@ public class SudokuSolver {
 //                {0, 5, 2, 0, 4, 0, 1, 3, 0},
 //        };
 
+//        int[][] board = {
+//                {0, 0, 5, 0, 0, 0, 9, 0, 4},
+//                {0, 3, 0, 6, 0, 0, 7, 0, 0},
+//                {1, 0, 0, 4, 0, 9, 0, 8, 0},
+//                {3, 0, 0, 0, 1, 0, 0, 9, 2},
+//                {0, 4, 1, 0, 5, 0, 6, 7, 0},
+//                {7, 9, 0, 0, 4, 0, 0, 0, 8},
+//                {0, 6, 0, 5, 0, 1, 0, 0, 7},
+//                {0, 0, 9, 0, 0, 2, 0, 1, 0},
+//                {5, 0, 3, 0, 0, 0, 2, 0, 0},
+//        };
+
+//        int[][] board = {
+//                {6, 1, 0, 7, 2, 0, 0, 5, 0},
+//                {0, 0, 0, 0, 0, 5, 1, 9, 7},
+//                {3, 7, 0, 0, 0, 1, 2, 0, 0},
+//                {0, 0, 0, 0, 0, 9, 4, 7, 0},
+//                {7, 0, 1, 0, 0, 0, 9, 0, 5},
+//                {0, 4, 8, 6, 0, 0, 0, 0, 0},
+//                {0, 0, 7, 4, 0, 0, 0, 1, 9},
+//                {4, 9, 6, 5, 0, 0, 0, 0, 0},
+//                {0, 2, 0, 0, 7, 6, 0, 4, 8},
+//        };
+
         int[][] board = {
-                {0, 0, 5, 0, 0, 0, 9, 0, 4},
-                {0, 3, 0, 6, 0, 0, 7, 0, 0},
-                {1, 0, 0, 4, 0, 9, 0, 8, 0},
-                {3, 0, 0, 0, 1, 0, 0, 9, 2},
-                {0, 4, 1, 0, 5, 0, 6, 7, 0},
-                {7, 9, 0, 0, 4, 0, 0, 0, 8},
-                {0, 6, 0, 5, 0, 1, 0, 0, 7},
-                {0, 0, 9, 0, 0, 2, 0, 1, 0},
-                {5, 0, 3, 0, 0, 0, 2, 0, 0},
+                {0, 0, 6, 0, 0, 5, 3, 0, 2},
+                {0, 0, 0, 0, 0, 4, 7, 0, 0},
+                {9, 0, 0, 3, 0, 0, 8, 6, 0},
+                {0, 0, 0, 0, 0, 3, 0, 7, 0},
+                {0, 0, 3, 0, 0, 0, 5, 0, 0},
+                {0, 7, 0, 5, 0, 0, 0, 0, 0},
+                {0, 2, 4, 0, 0, 7, 0, 0, 9},
+                {0, 0, 1, 9, 0, 0, 0, 0, 0},
+                {3, 0, 9, 8, 0, 0, 2, 0, 0},
         };
-
-//        System.out.println(0%3); // + 1
-//        System.out.println(1%3); // N/A
-//        System.out.println(2%3); // - 1
-//
-//        System.out.println(3%3); // + 1
-//        System.out.println(4%3); // N/A
-//        System.out.println(5%3); // - 1
-//
-//        System.out.println(6%3); // + 1
-//        System.out.println(7%3); // N/A
-//        System.out.println(8%3); // - 1
-
-//        Integer[] position = {3,2};
-//
-//        System.out.println(checkRow(board, position, 1, new ArrayList<>()));
-//        System.out.println(checkColumn(board, position, 1, new ArrayList<>()));
-//        System.out.println(checkGrid(board, position, 2, new ArrayList<>()));
 
         solve(board);
     }
 
     public static void solve(int[][] board) {
         ArrayList<Integer[]> allEmptyPositions = findAllEmpty(board);
+        HashMap<Integer, ArrayList<Integer>> impossibleNumbers = new HashMap<>();
+        for(int i=0; i<allEmptyPositions.size(); i++) {
+            impossibleNumbers.putIfAbsent(i, new ArrayList<>());
+        }
+
+        int key = 0;
+        while(true) {
+            System.out.println(key);
+            Integer[] currentPosition = allEmptyPositions.get(key);
+            int nextMove = findValidMove(board, currentPosition, impossibleNumbers.get(key));
+
+            if(nextMove != -1) {
+                key++;
+                board[currentPosition[0]][currentPosition[1]] = nextMove;
+            } else {
+                impossibleNumbers.get(key).clear();
+                key--;
+                Integer[] previousPosition = allEmptyPositions.get(key);
+                impossibleNumbers.get(key).add(board[previousPosition[0]][previousPosition[1]]);
+                board[previousPosition[0]][previousPosition[1]] = 0;
+            }
+
+            if(key == allEmptyPositions.size())
+                break;
+        }
+
         prettifySudoku(board);
+    }
+
+    public static int findValidMove(int[][] board, Integer[] currentPosition, ArrayList<Integer> impossibleNumbers) {
+        for(int number=1; number<=board.length; number++) {
+            if(isValidMove(board, currentPosition, number, impossibleNumbers))
+                return number;
+        }
+
+        return -1;
     }
 
     public static boolean checkRow(int[][] board, Integer[] currentPosition, int number, ArrayList<Integer> impossibleNumbers) {
@@ -93,7 +134,7 @@ public class SudokuSolver {
         return true;
     }
 
-    public static boolean isValid(int[][] board, Integer[] currentPosition, int number, ArrayList<Integer> impossibleNumbers) {
+    public static boolean isValidMove(int[][] board, Integer[] currentPosition, int number, ArrayList<Integer> impossibleNumbers) {
         boolean row, column, grid;
 
         if(impossibleNumbers.contains(number))
