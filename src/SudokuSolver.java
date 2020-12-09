@@ -66,17 +66,18 @@ public class SudokuSolver {
         return true;
     }
 
-    public static boolean isValid(int[][] board, Integer[] position, int number, int oldNumber) {
+    public static boolean isValid(int[][] board, Integer[] position, int number, int[] oldNumbers) {
         // Pass in an array of integers for old number;
-        for(int i=0; i<9; i++) {
-            if(board[position[0]][i] == number || board[position[0]][i] == oldNumber) {
+        for(int i=0; i<board.length; i++) {
+            if(i == oldNumbers[i])
+                continue;
+
+            if(board[position[0]][i] == number)
                 return false;
-            }
-            if(board[i][position[1]] == number || board[i][position[1]] == oldNumber) {
+            if(board[i][position[1]] == number)
                 return false;
-            }
         }
-        return false;
+        return true;
     }
 
     public static void prettifySudoku(int[][] board) {
