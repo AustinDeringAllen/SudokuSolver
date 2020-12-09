@@ -19,6 +19,10 @@ public class SudokuSolver {
 
     public static void solve(int[][] board) {
         ArrayList<Integer[]> allEmpty = findAllEmpty(board);
+        findValid(board, allEmpty);
+    }
+
+    public static void findValid(int[][] board, ArrayList<Integer[]> allEmpty) {
         for(int i=0; i<allEmpty.size(); i++) {
             for(int j=0; j<board.length; j++) {
                 if(isValid(board, allEmpty.get(i), j))
