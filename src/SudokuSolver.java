@@ -14,15 +14,25 @@ public class SudokuSolver {
                 {0, 5, 2, 0, 4, 0, 1, 3, 0},
         };
 
-        ArrayList<Integer[]> emptyPositions = findEmpty(board);
-        for(Integer[] position : emptyPositions) {
-            System.out.println(position[0] + " , " + position[1]);
-        }
-
-        prettifySudoku(board);
+        solve(board);
     }
 
-    public static ArrayList<Integer[]> findEmpty(int[][] board) {
+    public static void solve(int[][] board) {
+        ArrayList<Integer[]> allEmpty = findAllEmpty(board);
+    }
+
+    public static int[] findEmpty(int[][] board) {
+        for(int i=0; i<board.length; i++) {
+            for(int j=0; j<board.length; j++) {
+                if(board[i][j] == 0) {
+                    return new int[] {i,j};
+                }
+            }
+        }
+        return null;
+    }
+
+    public static ArrayList<Integer[]> findAllEmpty(int[][] board) {
         ArrayList<Integer[]> emptyPositions = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -44,6 +54,19 @@ public class SudokuSolver {
             }
         }
         return true;
+    }
+
+    public static boolean isValid(int[][] board, Integer[] position, int number, int oldNumber) {
+        // Pass in an array of integers for old number;
+        for(int i=0; i<9; i++) {
+            if(board[position[0]][i] == number || board[position[0]][i] == oldNumber) {
+                return false;
+            }
+            if(board[i][position[1]] == number || board[i][position[1]] == oldNumber) {
+                return false;
+            }
+        }
+        return false;
     }
 
     public static void prettifySudoku(int[][] board) {
