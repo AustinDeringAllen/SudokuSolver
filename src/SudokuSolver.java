@@ -63,6 +63,14 @@ public class SudokuSolver {
         return true;
     }
 
+    public static boolean checkColumn(int[][] board, Integer[] currentPosition, int number, ArrayList<Integer> impossibleNumbers) {
+        for(int i=0; i<board.length; i++) {
+            if(board[i][currentPosition[1]] == number)
+                return false;
+        }
+        return true;
+    }
+
     public static int[] findEmpty(int[][] board) {
         for(int i=0; i<board.length; i++) {
             for(int j=0; j<board.length; j++) {
