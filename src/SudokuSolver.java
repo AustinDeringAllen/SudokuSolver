@@ -93,6 +93,20 @@ public class SudokuSolver {
         return true;
     }
 
+    public static boolean isValid(int[][] board, Integer[] currentPosition, int number, ArrayList<Integer> impossibleNumbers) {
+        boolean row, column, grid;
+
+        if(impossibleNumbers.contains(number))
+            return false;
+
+        row = checkRow(board, currentPosition, number, impossibleNumbers);
+        column = checkColumn(board, currentPosition, number, impossibleNumbers);
+        System.out.println("----------");
+        grid = checkGrid(board, currentPosition, number, impossibleNumbers);
+
+        return row && grid && column;
+    }
+
     public static int[] findEmpty(int[][] board) {
         for(int i=0; i<board.length; i++) {
             for(int j=0; j<board.length; j++) {
